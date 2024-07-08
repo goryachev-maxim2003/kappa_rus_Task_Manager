@@ -50,6 +50,7 @@ def get_max_datatime(ser): #Максимальное время в series (дл�
 # Функция записи определённых ответов в журнал определённого участка
 def write_in_plot(plot):
     global  journals_books
+    errors.delete('1.0', 'end')
     journal = pd.read_excel(plot_fields.loc[plot, "Журнал"], skiprows=[1])
     # Объединяем дату и время
     journal["datatime"] = journal["Дата"] + journal["Время"].apply(lambda t: pd.to_timedelta(str(t)))
@@ -69,13 +70,15 @@ def write_in_plot(plot):
     plot_problems = plot_problems.drop(columns = ["Выберите задачу", 'Выберите участок', "Выберите станок"], axis = 1)
     plot_problems = plot_problems.apply(lambda row : row.dropna().reset_index(drop = True), axis = 1)
     #Записываем файл
-    book = xw.Book(plot_fields.loc[plot, "Журнал"])
-    sht = book.sheets['Sheet1']
-    first_empty_row =  3 if (sht.range('A3').value is None) else sht.range('A3').end('down').row + 1
-    sht.range(f'A{first_empty_row}').expand(mode='table').value = plot_problems.values
-    #Сохраняем файл
-    book.save()
-    journals_books.append(book)
+    if (len(plot_problems) > 0):
+        book = xw.Book(plot_fields.loc[plot, "Журнал"])
+        sht = book.sheets['Sheet1']
+        first_empty_row =  3 if (sht.range('A3').value is None) else sht.range('A3').end('down').row + 1
+        sht.range(f'A{first_empty_row}').expand(mode='table').value = plot_problems.values
+        #Сохраняем файл
+        book.save()
+    else:
+        errors.insert(1.0, "Новых записей не появилось")
 
 def load():
     plots = problems["Выберите участок"].dropna().unique()
@@ -83,15 +86,18 @@ def load():
     for plot in plots:
         write_in_plot(plot)
 def close():
+    errors.delete('1.0', 'end')
     for book in journals_books:
         book.close()
 journals_books = []
 root = tk.Tk()
+root.title("Заполнение журналов на основе Яндекс форм")
 root.geometry("500x500")
 bt_load = tk.Button(root, text="Загрузить новые данные из yandex forms", width=50, height=1, command=lambda : load())
 bt_load.place(x=50, y=25)
 bt_close = tk.Button(root, text="Закрыть все журналы", width=50, height=1, command=lambda : close())
 bt_close.place(x=50, y=55)
-
+errors = tk.Text(root, width=44, height=10, foreground="red")
+errors.place(x=50, y=100)
 
 root.mainloop()
