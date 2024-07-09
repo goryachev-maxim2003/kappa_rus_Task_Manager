@@ -144,60 +144,59 @@ def load_from_yandex():
     global files_in_program_dir
     for_Task_Manager = pd.read_excel('Файл для Task_Manager exe.xlsx', 'Параметры', dtype = str, index_col=0)
 
-    # my_user_agent =["Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
-    # "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
-    # "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
-    # "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
-    # 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
-    # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0']
+    my_user_agent =["Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
+    "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
+    "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0']
 
 
-    # edge_options = Options()
-    # edge_options.add_argument(f"--user-agent={my_user_agent[random.randint(0,18)]}")
-    # # edge_options.add_argument('--headless')
-    # driver = webdriver.Edge(options=edge_options)
-    # driver.get("https://forms.yandex.ru/admin/")
-    # time.sleep(random.randint(1,10))
+    edge_options = Options()
+    edge_options.add_argument(f"--user-agent={my_user_agent[random.randint(0,18)]}")
+    # edge_options.add_argument('--headless')
+    driver = webdriver.Edge(options=edge_options)
+    driver.get("https://forms.yandex.ru/admin/")
+    time.sleep(random.randint(1,10))
 
-    # vhod = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/div[2]/a")
-    # vhod.click()
-    # time.sleep(random.randint(3,10))
+    vhod = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/div[2]/a")
+    vhod.click()
+    time.sleep(random.randint(3,10))
 
-    # name_input = driver.find_element(By.ID, "passp-field-login")
-    # name_input.send_keys(for_Task_Manager.loc["Логин", "Значение"])
-    # int1 = driver.find_element(By.ID, "passp:sign-in")
-    # int1.click()
-    # time.sleep(random.randint(1,10))
+    name_input = driver.find_element(By.ID, "passp-field-login")
+    name_input.send_keys(for_Task_Manager.loc["Логин", "Значение"])
+    int1 = driver.find_element(By.ID, "passp:sign-in")
+    int1.click()
+    time.sleep(random.randint(1,10))
 
-    # name_input2 = driver.find_element(By.ID, "passp-field-passwd")
-    # name_input2.send_keys(for_Task_Manager.loc["Пароль", "Значение"])
-    # int2 = driver.find_element(By.ID, "passp:sign-in")
-    # int2.click()
-    # time.sleep(random.randint(3,7))
+    name_input2 = driver.find_element(By.ID, "passp-field-passwd")
+    name_input2.send_keys(for_Task_Manager.loc["Пароль", "Значение"])
+    int2 = driver.find_element(By.ID, "passp:sign-in")
+    int2.click()
+    time.sleep(random.randint(3,7))
+    form_A = driver.find_element(By.XPATH, f'/html/body/div[3]/div/div[1]/div[2]/div[1]/a[{for_Task_Manager.loc["Номер формы в строке форм Яндекса", "Значение"]}]')
+    form_A.click()
+    time.sleep(random.randint(1,4))
 
-    # form_A = driver.find_element(By.XPATH, '/html/body/div[3]/div/div[1]/div[2]/div[1]/a[2]')
-    # form_A.click()
-    # time.sleep(random.randint(1,4))
+    otvet_A = driver.find_element(By.XPATH, '/html/body/div[3]/div/div[2]/div[1]/a[5]')
+    otvet_A.click()
+    time.sleep(random.randint(2,5))
 
-    # otvet_A = driver.find_element(By.XPATH, '/html/body/div[3]/div/div[2]/div[1]/a[5]')
-    # otvet_A.click()
-    # time.sleep(random.randint(2,5))
-
-    # download = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/article/main/div[1]/div/button[2]')
-    # download.click()
-    # time.sleep(10)
+    download = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/article/main/div[1]/div/button[2]')
+    download.click()
+    time.sleep(10)
     download_files = os.listdir(for_Task_Manager.loc["Путь к папке загрузок", "Значение"])
     answers_file_name = 'Файл из Yandex Forms'
     # Удаляем все файлы с 'MenedzherZadach'
