@@ -5,12 +5,17 @@ import xlwings as xw
 import pandas as pd
 import numpy as np
 import os
+import random
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.edge.options import Options
+
 
 was_open_all = False
 # Открытие файла с ответами
 # Поиск файла с ответами в директории
 def open_all():
-    global files
     global text_fault
     global answers
     global problems
@@ -18,11 +23,14 @@ def open_all():
     global plot_fields
     global was_open_all
     global answers_file_name
+    global for_Task_Manager
+    global files_in_program_dir
     was_open_all = False
-    files = os.listdir()
-    answers_file_name = 'MenedzherZadach'
+    for_Task_Manager = pd.read_excel('Файл для Task_Manager exe.xlsx', 'Параметры', dtype = str, index_col=0)
+    files_in_program_dir = os.listdir(for_Task_Manager.loc["Путь к папке с программой", "Значение"])
+    answers_file_name = 'Файл из Yandex Forms'
     # Ищем файл со строкой 'MenedzherZadach' в названии
-    for file_name in files:
+    for file_name in files_in_program_dir:
         if 'MenedzherZadach' in file_name and file_name[0]!='~':
             answers_file_name = file_name
             break
@@ -129,18 +137,96 @@ def upadte():
     global was_open_all
     was_open_all = False
     execute(do_nothing)
+def load_from_yandex():
+    global for_Task_Manager
+    global download_files
+    global answers_file_name
+    global files_in_program_dir
+    for_Task_Manager = pd.read_excel('Файл для Task_Manager exe.xlsx', 'Параметры', dtype = str, index_col=0)
+
+    # my_user_agent =["Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
+    # "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
+    # "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
+    # "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
+    # 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
+    # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0']
+
+
+    # edge_options = Options()
+    # edge_options.add_argument(f"--user-agent={my_user_agent[random.randint(0,18)]}")
+    # # edge_options.add_argument('--headless')
+    # driver = webdriver.Edge(options=edge_options)
+    # driver.get("https://forms.yandex.ru/admin/")
+    # time.sleep(random.randint(1,10))
+
+    # vhod = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/div[2]/a")
+    # vhod.click()
+    # time.sleep(random.randint(3,10))
+
+    # name_input = driver.find_element(By.ID, "passp-field-login")
+    # name_input.send_keys(for_Task_Manager.loc["Логин", "Значение"])
+    # int1 = driver.find_element(By.ID, "passp:sign-in")
+    # int1.click()
+    # time.sleep(random.randint(1,10))
+
+    # name_input2 = driver.find_element(By.ID, "passp-field-passwd")
+    # name_input2.send_keys(for_Task_Manager.loc["Пароль", "Значение"])
+    # int2 = driver.find_element(By.ID, "passp:sign-in")
+    # int2.click()
+    # time.sleep(random.randint(3,7))
+
+    # form_A = driver.find_element(By.XPATH, '/html/body/div[3]/div/div[1]/div[2]/div[1]/a[2]')
+    # form_A.click()
+    # time.sleep(random.randint(1,4))
+
+    # otvet_A = driver.find_element(By.XPATH, '/html/body/div[3]/div/div[2]/div[1]/a[5]')
+    # otvet_A.click()
+    # time.sleep(random.randint(2,5))
+
+    # download = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/article/main/div[1]/div/button[2]')
+    # download.click()
+    # time.sleep(10)
+    download_files = os.listdir(for_Task_Manager.loc["Путь к папке загрузок", "Значение"])
+    answers_file_name = 'Файл из Yandex Forms'
+    # Удаляем все файлы с 'MenedzherZadach'
+    files_in_program_dir = os.listdir(for_Task_Manager.loc["Путь к папке с программой", "Значение"])
+    for file_name in files_in_program_dir:
+        if 'MenedzherZadach' in file_name and file_name[0]!='~':
+            os.remove(file_name)
+    # Ищем файл со строкой 'MenedzherZadach' в названии
+    for file_name in download_files:
+        if 'MenedzherZadach' in file_name and file_name[0]!='~':
+            answers_file_name = file_name
+            break
+    #Перемещаем скаченный файл в папку с директорией
+    os.rename(os.path.join(for_Task_Manager.loc["Путь к папке загрузок", "Значение"], answers_file_name), 
+            os.path.join(for_Task_Manager.loc["Путь к папке с программой", "Значение"], answers_file_name))
 
 journals_books = []
 root = tk.Tk()
 root.title("Заполнение журналов на основе Яндекс форм")
 root.geometry("750x500")
-bt_load = tk.Button(root, text="Загрузить новые данные из yandex forms", width=50, height=1, command=lambda : execute(load))
-bt_load.place(x=50, y=25)
+bt_load_from_yandex = tk.Button(root, text="Скачать файл из yandex forms", width=50, height=1, command=lambda : load_from_yandex())
+bt_load_from_yandex.place(x=50, y=25)
+bt_load = tk.Button(root, text="Загрузить новые данные из Скаченного файла", width=50, height=1, command=lambda : execute(load))
+bt_load.place(x=50, y=55)
 bt_close = tk.Button(root, text="Закрыть все журналы", width=50, height=1, command=lambda : execute(close))
-bt_close.place(x=50, y=55)
+bt_close.place(x=50, y=85)
 errors = tk.Text(root, width=80, height=10, foreground="red")
-errors.place(x=50, y=100)
+errors.place(x=50, y=130)
 update = tk.Button(root, text="Обновить данные", width=20, height=2, command=lambda : upadte())
-update.place(x=50, y=275)
+update.place(x=50, y=305)
 
 root.mainloop()
