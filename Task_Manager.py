@@ -48,6 +48,7 @@ def get_max_datatime(ser): #Максимальное время в series (дл�
     return pd.to_datetime(0) if len(ser) == 0 else ser.max()
 # Функция записи определённых ответов в журнал определённого участка
 def write_in_plot(plot):
+    global journals_books
     journal = pd.read_excel(plot_fields.loc[plot, "Журнал"], skiprows=[1])
     # Объединяем дату и время
     journal["datatime"] = journal["Дата"] + journal["Время"].apply(lambda t: pd.to_timedelta(str(t)))
@@ -78,6 +79,7 @@ def write_in_plot(plot):
     no_new_data = False #новых данных нет 
     if (len(plot_problems) > 0):
         book = xw.Book(plot_fields.loc[plot, "Журнал"])
+        journals_books.append(book)
         sht = book.sheets['Sheet1']
         first_empty_row =  3 if (sht.range('A3').value is None) else sht.range('A3').end('down').row + 1
         sht.range(f'A{first_empty_row}').expand(mode='table').value = plot_problems.values
@@ -112,15 +114,15 @@ def close():
 
 def execute(f): #Добавляет проверки перед выполнением функции
     errors.delete('1.0', 'end')
-    # try:
-    if (not was_open_all):
-        open_all()
-    f()
-#     except Exception as e:
-#         errors.insert(1.0, str(e)
-#         +'\n1. Проверьте корректность названия в файле: "Файл для Task_Manager exe.xlsx"\n\
-# 2. Исправьте найденную ошибку и сохраните файл\n\
-# 3. Нажмите кнопку обновить данные или перезагрузите приложение')
+    try:
+        if (not was_open_all):
+            open_all()
+        f()
+    except Exception as e:
+        errors.insert(1.0, str(e)
+        +'\n1. Проверьте корректность названия в файле: "Файл для Task_Manager exe.xlsx"\n\
+2. Исправьте найденную ошибку и сохраните файл\n\
+3. Нажмите кнопку обновить данные или перезагрузите приложение')
 def do_nothing():
     pass
 def upadte():
