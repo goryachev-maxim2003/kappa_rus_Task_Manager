@@ -41,6 +41,15 @@ def open_all():
     problems = answers[answers["Выберите задачу"] == text_fault]
 
     problems["Время создания"] = pd.to_datetime(problems["Время создания"])
+    # Изменяем ссылку на фото, чтобы была ссылка на общий яндекс диск
+    def convert_link(link):
+        if pd.isna(link):
+            return np.nan
+        else:
+            splitted = link.split('%2F')
+            return f'{for_Task_Manager.loc["Ссылка на папку Yandex Froms на Yandex диске", "Значение"]}/{splitted[-2]}/{splitted[-1]}'
+
+    problems["Вставьте фотографию"] = problems["Вставьте фотографию"].apply(convert_link)
 
     # Соответствие между участком и журналом
     optional_fields_in_machines = np.array(["Опишите аномалию", "Вставьте фотографию"])
@@ -82,14 +91,28 @@ def write_in_plot(plot):
     if (len(get_column_or_empty(problems, "Выберите станок")) > 0):
         drop_cols.append("Выберите станок")
     plot_problems = plot_problems.drop(columns = drop_cols, axis = 1)
-    plot_problems = plot_problems.apply(lambda row : row.dropna().reset_index(drop = True), axis = 1)
+    # Удаляет пустые столбцы, учитывая особый случай
+    def remove_unnecessary(row):
+        row = row.dropna().reset_index(drop = True)
+        #Если у Гофроагрегата выбрана секция другое, то узел не выбирается => нужно добавить и узел = другое. Этот случай определяется
+        # тем что строка после удаления пустых значений становится короче на 1 элемент чем должна быть (7 вместо 8)
+        if (len(row) == 7):
+            row.loc[7] = row.loc[6]
+            row.loc[6] = "Другое"
+        return row
+    plot_problems = plot_problems.apply(remove_unnecessary, axis = 1)
     #Записываем файл
     no_new_data = False #новых данных нет 
     if (len(plot_problems) > 0):
         book = xw.Book(plot_fields.loc[plot, "Журнал"])
         journals_books.append(book)
         sht = book.sheets['Sheet1']
-        first_empty_row =  3 if (sht.range('A3').value is None) else sht.range('A3').end('down').row + 1
+        if (sht.range('A3').value is None):
+            first_empty_row = 3
+        elif (sht.range('A4').value is None): #end('down') от A3, когда в A4 нет значения работает не корректно
+            first_empty_row = 4
+        else:
+            first_empty_row = sht.range('A3').end('down').row + 1
         sht.range(f'A{first_empty_row}').expand(mode='table').value = plot_problems.values
         #Сохраняем файл
         book.save()
@@ -102,7 +125,7 @@ def get_column_or_empty(df, col):
         return df[col]
     else:
         return pd.Series()
-#Возвращает колонку датафрейма или пустой False (нужно для того, чтобы в логических выражениях пустой series ассоциировался с False)
+#Возвращает колонку датафрейма или False (нужно для того, чтобы в логических выражениях пустой series ассоциировался с False)
 def false_if_empty(ser):
     if (len(ser) == 0):
         return False
@@ -169,26 +192,26 @@ def load_from_yandex():
     # edge_options.add_argument('--headless')
     driver = webdriver.Edge(options=edge_options)
     driver.get("https://forms.yandex.ru/admin/")
-    time.sleep(random.randint(1,10))
+    time.sleep(random.randint(1,3))
 
     vhod = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/div[2]/a")
     vhod.click()
-    time.sleep(random.randint(3,10))
+    time.sleep(random.randint(3,5))
 
     name_input = driver.find_element(By.ID, "passp-field-login")
     name_input.send_keys(for_Task_Manager.loc["Логин", "Значение"])
     int1 = driver.find_element(By.ID, "passp:sign-in")
     int1.click()
-    time.sleep(random.randint(1,10))
+    time.sleep(random.randint(1,3))
 
     name_input2 = driver.find_element(By.ID, "passp-field-passwd")
     name_input2.send_keys(for_Task_Manager.loc["Пароль", "Значение"])
     int2 = driver.find_element(By.ID, "passp:sign-in")
     int2.click()
-    time.sleep(random.randint(3,7))
+    time.sleep(random.randint(3,5))
     form_A = driver.find_element(By.XPATH, f'/html/body/div[3]/div/div[1]/div[2]/div[1]/a[{for_Task_Manager.loc["Номер формы в строке форм Яндекса", "Значение"]}]')
     form_A.click()
-    time.sleep(random.randint(1,4))
+    time.sleep(random.randint(1,3))
 
     otvet_A = driver.find_element(By.XPATH, '/html/body/div[3]/div/div[2]/div[1]/a[5]')
     otvet_A.click()
@@ -210,8 +233,8 @@ def load_from_yandex():
             answers_file_name = file_name
             break
     #Перемещаем скаченный файл в папку с директорией
-    os.rename(os.path.join(for_Task_Manager.loc["Путь к папке загрузок", "Значение"], answers_file_name), 
-            os.path.join(for_Task_Manager.loc["Путь к папке с программой", "Значение"], answers_file_name))
+    # os.rename(os.path.join(for_Task_Manager.loc["Путь к папке загрузок", "Значение"], answers_file_name), 
+    #         os.path.join(for_Task_Manager.loc["Путь к папке с программой", "Значение"], answers_file_name))
 
 journals_books = []
 root = tk.Tk()
